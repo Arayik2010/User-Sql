@@ -3,6 +3,7 @@ import { useAuth } from "./auth/useAuth";
 import { GuestRoute, ProtectedRoute } from "./auth/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
 import SignInPage from "./pages/SignInPage";
+import UserFormPage from "./pages/UserFormPage";
 import UsersPage from "./pages/UsersPage";
 import "./App.css";
 
@@ -43,6 +44,8 @@ function App() {
       <Route element={<Layout />}>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<UsersPage />} />
+          <Route path="/users/new" element={<UserFormPage />} />
+          <Route path="/users/:id/edit" element={<UserFormPage />} />
         </Route>
         <Route element={<GuestRoute />}>
           <Route path="/sign-in" element={<SignInPage />} />

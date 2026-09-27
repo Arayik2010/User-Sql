@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createUser, deleteUser, fetchUsers, UnauthorizedError } from "../api";
+import { Link, useNavigate } from "react-router-dom";
+import { deleteUser, fetchUsers, fetchUserSalary, fetchUsersWork, UnauthorizedError } from "../api";
 import { useAuth } from "../auth/useAuth";
 import "../App.css";
 
@@ -17,13 +17,13 @@ function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
+    fetchUsersWork<User[]>()
+    fetchUserSalary<User[]>()
 
     fetchUsers<User[]>()
       .then((data) => {
@@ -48,23 +48,6 @@ function UsersPage() {
       cancelled = true;
     };
   }, [logout, navigate, reloadKey]);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    try {
-      await createUser({ name, email });
-      setName("");
-      setEmail("");
-      setReloadKey((key) => key + 1);
-    } catch (err) {
-      if (err instanceof UnauthorizedError) {
-        logout();
-        navigate("/sign-in", { replace: true });
-        return;
-      }
-      setError(err instanceof Error ? err.message : "Failed to add user");
-    }
-  }
 
   async function handleDelete(id: number) {
     try {
@@ -91,26 +74,13 @@ function UsersPage() {
         {users.map((user) => (
           <li key={user.id}>
             {user.name} {user.email ? `— ${user.email}` : ""}
+            <Link to={`/users/${user.id}/edit`}>Edit</Link>
             <button onClick={() => handleDelete(user.id)}>Delete</button>
           </li>
         ))}
       </ul>
 
-      <h2>Add user</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", gap: 8 }}>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button type="submit">Add</button>
-      </form>
+      <Link to="/users/new">Add user</Link>
     </div>
   );
 }

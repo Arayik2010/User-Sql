@@ -89,11 +89,34 @@ export function fetchUsers<T>() {
   return requestJson<T>("", { method: "GET" }, { auth: true });
 }
 
+export function fetchUsersWork<T>() {
+  return requestJson<T>("/user_work", { method: "GET" }, { auth: true });
+}
+
+export function fetchUserSalary<T>() {
+  return requestJson<T>("/users_salary", { method: "GET" }, { auth: true });
+}
+
 export function createUser<T>(payload: { name: string; email: string }) {
   return requestJson<T>(
     "",
     {
       method: "POST",
+      body: JSON.stringify(payload),
+    },
+    { auth: true }
+  );
+}
+
+export function fetchUser<T>(id: number) {
+  return requestJson<T>(`/${id}`, { method: "GET" }, { auth: true });
+}
+
+export function updateUser<T>(id: number, payload: { name: string; email: string }) {
+  return requestJson<T>(
+    `/${id}`,
+    {
+      method: "PUT",
       body: JSON.stringify(payload),
     },
     { auth: true }
