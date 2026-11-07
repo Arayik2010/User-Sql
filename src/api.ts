@@ -93,6 +93,10 @@ export function fetchUsersWork<T>() {
   return requestJson<T>("/user_work", { method: "GET" }, { auth: true });
 }
 
+export function fetchUsersWorkSalaries<T>() {
+  return requestJson<T>("/works_salaries", { method: "GET" }, { auth: true });
+}
+
 export function fetchUserSalary<T>() {
   return requestJson<T>("/users_salary", { method: "GET" }, { auth: true });
 }

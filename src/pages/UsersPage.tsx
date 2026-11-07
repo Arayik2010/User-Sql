@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { deleteUser, fetchUsers, fetchUserSalary, fetchUsersWork, UnauthorizedError } from "../api";
+import { deleteUser, fetchUsers, fetchUserSalary, fetchUsersWork, fetchUsersWorkSalaries, UnauthorizedError } from "../api";
 import { useAuth } from "../auth/useAuth";
 import "../App.css";
 
@@ -24,6 +24,7 @@ function UsersPage() {
     setLoading(true);
     fetchUsersWork<User[]>()
     fetchUserSalary<User[]>()
+    fetchUsersWorkSalaries()
 
     fetchUsers<User[]>()
       .then((data) => {
